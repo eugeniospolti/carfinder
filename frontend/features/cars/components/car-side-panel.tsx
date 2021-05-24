@@ -118,7 +118,7 @@ export default function CarSidePanel(props) {
 
                              <FormControl id="availableDate">
                                 <FormLabel htmlFor="availableDate">Available date</FormLabel>
-                                <Input type="text" name="availableDate"  {...register("availableDate")} isInvalid={!!errors?.availableDate?.message}/> 
+                                <Input type="text" name="availableDate" placeholder="MM-DD-YYYY" {...register("availableDate")} isInvalid={!!errors?.availableDate?.message}/> 
                                 <FormErrorMessage>{errors?.availableDate?.message}</FormErrorMessage>                         
                             </FormControl>
                         </Stack>                        
