@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  database:
+    container_name: database
+    image: mongo
+  api:
+    container_name: api
+    external_links:
+      - database
+    depends_on:
+      - database
+  app:
+    container_name: app
+    depends_on:
+      - api

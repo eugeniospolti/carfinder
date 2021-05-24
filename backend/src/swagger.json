@@ -1,0 +1,256 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Car Finder",
+        "description": "Demo backend project",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+
+    },
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/api/cars": {
+            "get": {
+                "tags": [
+                    "Cars"
+                ],
+                "summary": "Get all cars in system",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "search",
+                        "description": "Search string to filter Makers or Models",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "description": "The numbers of items to return",
+                        "schema": {
+                            "type": "number",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "offset",
+                        "description": "The number of items to skip before starting to collect the result set",
+                        "schema": {
+                            "type": "number",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "sort",
+                        "description": "The column name to sort",
+                        "schema": {
+                            "type": "string",
+                            "default": "monthlyPrice"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "status",
+                        "description": "Status to filter cars: all or available",
+                        "schema": {
+                            "type": "string",
+                            "default": "available"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Cars"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Cars"
+                ],
+                "summary": "Create a new car in system",
+                "requestBody": {
+                    "description": "Car Object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Car"
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Created car",
+                        "schema": {
+                            "$ref": "#/definitions/Car"
+                        }
+                    },
+                    "400": {
+                        "description": "Failed. Bad post data."
+                    }
+                }
+            }
+        },
+        "/api/cars/{id}": {
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "description": "ID of the car that we want to match",
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Cars"
+                ],
+                "summary": "Get car with given ID",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "description": "Car with id",
+                        "schema": {
+                            "$ref": "#/definitions/id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Car"
+                        }
+                    },
+                    "404": {
+                        "description": "Failed. Car not found."
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update car with given ID",
+                "tags": [
+                    "Car"
+                ],
+                "requestBody": {
+                    "description": "Car Object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Car"
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "description": "Car id",
+                        "schema": {
+                            "$ref": "#/definitions/id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Car"
+                        }
+                    },
+                    "400": {
+                        "description": "Failed. Bad post data."
+                    },
+                    "404": {
+                        "description": "Failed. Car not found."
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "id": {
+            "properties": {
+                "uuid": {
+                    "type": "string"
+                }
+            }
+        },
+        "Car": {
+            "type": "object",
+            "properties": {
+                "maker": {
+                    "type": "string",
+                    "example": "Tesla",
+                    "description": "Maker`s name"
+                },
+                "model_name": {
+                    "type": "string",
+                    "example": "Model S",
+                    "description": "Model`s name"
+                },
+                "year": {
+                    "type": "number",
+                    "example": "2019",
+                    "description": "Year of manufacture of the car"
+                },
+                "color": {
+                    "type": "string",
+                    "example": "black",
+                    "description": "Color of the car"
+                },                
+                "monthlyPrice": {
+                    "type": "number",
+                    "example": "400",
+                    "description": "Montly price"
+                },                
+                "availableDate": {
+                    "type": "string",
+                    "example": "2021-01-01",
+                    "pattern": "DD-MM-YYYY",
+                    "format": "date",
+                    "description": "Car availability date"
+                }
+            }
+        },
+        "Cars": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/Car"
+                    }
+                },
+                "totalCount": {
+                    "type": "number",
+                    "description": "Total count of cars"
+                }
+            }
+        }
+    }
+}
